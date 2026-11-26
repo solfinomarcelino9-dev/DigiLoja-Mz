@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigiLoja MZ — Produtos Digitais em PDF</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .modal-enter { animation: fadeIn 0.2s ease-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-emerald-700 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+          D
+        </div>
+        <div>
+          <span id="brandNameHeader" class="font-extrabold text-lg tracking-tight text-slate-900">DigiLoja MZ</span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+            Produtos Digitais • PDF
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="openSettingsModal()" class="text-xs sm:text-sm font-medium px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 transition flex items-center gap-1.5" title="Configurar números de recebimento">
+          <span>⚙️</span>
+          <span class="hidden md:inline">Recebimentos</span>
+        </button>
+
+        <button onclick="openAdminModal()" class="text-xs sm:text-sm font-medium px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 transition flex items-center gap-1.5">
+          <span>+</span>
+          <span class="hidden sm:inline">Gerir Produtos</span>
+        </button>
+
+        <button onclick="toggleCart(true)" class="relative bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+          <span>Carrinho</span>
+          <span id="cartBadge" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-1.5 py-0.5 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 text-white py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-12 gap-8 items-center">
+      <div class="md:col-span-7 space-y-4">
+        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3.5 py-1 text-xs font-medium text-emerald-100">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          Pagamento direto via M-Pesa ou e-Mola • Entrega imediata no WhatsApp
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+          Manuais, Guias e Modelos em <span class="text-amber-300">PDF</span> prontos a usar.
+        </h1>
+        <p class="text-emerald-100/90 text-base sm:text-lg max-w-xl leading-relaxed">
+          Materiais práticos feitos para empreendedores, estudantes e profissionais em Moçambique. Escolha o seu PDF, transfira via M-Pesa ou e-Mola e receba o ficheiro diretamente no WhatsApp.
+        </p>
+        <div class="pt-2 flex flex-wrap gap-3">
+          <a href="#catalogo" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-6 py-3 rounded-xl shadow transition text-sm sm:text-base">
+            Explorar Catálogo
+          </a>
+          <a id="heroWhatsappBtn" href="https://wa.me/258858972605" target="_blank" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-5 py-3 rounded-xl transition text-sm sm:text-base flex items-center gap-2">
+            <span>💬</span> Falar no WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- Card Destaque -->
+      <div class="md:col-span-5">
+        <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-6 space-y-4 shadow-xl">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Como funciona</span>
+            <span class="text-xs bg-emerald-500/20 text-emerald-100 px-2.5 py-1 rounded-full">100% Digital • PDF</span>
+          </div>
+          <ol class="space-y-3 text-sm text-emerald-50">
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+              <span>Adicione os guias ou manuais em <strong>PDF</strong> ao seu carrinho.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+              <span>Transfira o valor total para o nosso <strong>M-Pesa</strong> ou <strong>e-Mola</strong> oficial.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+              <span>Clique em <strong>Enviar Comprovativo no WhatsApp</strong> e receba o seu PDF na hora.</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catálogo -->
+  <main id="catalogo" class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900">Catálogo de Produtos Digitais (PDF)</h2>
+        <p class="text-sm text-slate-500 mt-0.5">Todos os materiais são enviados em formato PDF de alta qualidade após confirmação.</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Pesquisar guia, manual ou tema..."
+          oninput="renderProducts()"
+          class="w-full sm:w-64 px-4 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600"
+        />
+      </div>
+    </div>
+
+    <!-- Filtros de Categoria -->
+    <div id="categoryFilters" class="flex flex-wrap gap-2 mb-8"></div>
+
+    <!-- Grid de Produtos -->
+    <div id="productsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <div>
+        <span id="brandNameFooter" class="font-bold text-slate-800">DigiLoja MZ</span> — Produtos Digitais em Moçambique.
+      </div>
+      <div class="flex items-center gap-4">
+        <span>M-Pesa: <strong class="text-slate-700" id="footerMpesa">858972605</strong></span>
+        <span>•</span>
+        <span>e-Mola: <strong class="text-slate-700" id="footerEmola">870550188</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Detalhes do Produto -->
+  <div id="productModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl modal-enter relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeProductModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600">✕</button>
+      <div id="productModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Drawer Carrinho & Checkout -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
+    <div onclick="toggleCart(false)" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs"></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-lg text-slate-900">O Seu Carrinho</h3>
+          <p class="text-xs text-slate-500">Pagamento direto via M-Pesa ou e-Mola</p>
+        </div>
+        <button onclick="toggleCart(false)" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600">✕</button>
+      </div>
+
+      <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+
+      <div id="cartFooter" class="p-5 border-t border-slate-200 bg-slate-50 space-y-4 hidden">
+        <div class="flex items-center justify-between text-base font-bold text-slate-900">
+          <span>Total a Pagar:</span>
+          <span id="cartTotal" class="text-xl text-emerald-700">0 MT</span>
+        </div>
+
+        <!-- Dados do Cliente -->
+        <div class="space-y-2.5">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Seu Nome *</label>
+            <input id="customerName" type="text" placeholder="Ex: Carlos Sitoe" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Método de Pagamento Escolhido *</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" id="btnMethodMpesa" onclick="selectPaymentMethod('M-Pesa')" class="py-2 px-3 rounded-lg border-2 border-red-600 bg-red-50 text-red-700 font-bold text-xs flex items-center justify-center gap-1.5">
+                📱 M-Pesa
+              </button>
+              <button type="button" id="btnMethodEmola" onclick="selectPaymentMethod('e-Mola')" class="py-2 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5">
+                🟠 e-Mola
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cartão de Instruções de Pagamento -->
+        <div id="paymentDetailsBox" class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2 text-xs"></div>
+
+        <button onclick="finalizeOrderWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm">
+          <span>📲</span>
+          <span>Enviar Comprovativo no WhatsApp</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Gerir Produtos -->
+  <div id="adminModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl modal-enter max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <h3 class="font-bold text-lg text-slate-900">Gerir Produtos da Loja</h3>
+        <button onclick="closeAdminModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center">✕</button>
+      </div>
+
+      <form onsubmit="addNewProduct(event)" class="mt-4 space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <h4 class="font-bold text-sm text-slate-800">Adicionar Novo Produto PDF</h4>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Título do Produto *</label>
+            <input id="newTitle" required type="text" placeholder="Ex: Guia de Obras Civis" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Categoria *</label>
+            <select id="newCategory" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg">
+              <option value="Finanças & Negócios">Finanças & Negócios</option>
+              <option value="Importação & Comércio">Importação & Comércio</option>
+              <option value="Modelos & Contratos">Modelos & Contratos</option>
+              <option value="Engenharia & Obras">Engenharia & Obras</option>
+              <option value="Marketing & Vendas">Marketing & Vendas</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Preço (MZN) *</label>
+            <input id="newPrice" required type="number" min="1" placeholder="Ex: 350" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Formato</label>
+            <input id="newFormat" type="text" value="PDF" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Breve Descrição *</label>
+          <textarea id="newDesc" required rows="2" placeholder="Explique o que o cliente aprende ou recebe..." class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg"></textarea>
+        </div>
+        <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-sm px-4 py-2 rounded-lg transition">
+          + Guardar Produto
+        </button>
+      </form>
+
+      <div class="mt-5">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="font-bold text-sm text-slate-800">Produtos Ativos</h4>
+          <button onclick="resetDefaultProducts()" class="text-xs text-red-600 hover:underline">Restaurar Lista Padrão</button>
+        </div>
+        <div id="adminProductList" class="space-y-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Configurações de Recebimento -->
+  <div id="settingsModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl modal-enter">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <h3 class="font-bold text-lg text-slate-900">Dados de Recebimento</h3>
+        <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center">✕</button>
+      </div>
+      <form onsubmit="saveSettings(event)" class="mt-4 space-y-3 text-sm">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nome da Loja</label>
+          <input id="setStoreName" type="text" required class="w-full px-3 py-2 border border-slate-300 rounded-lg" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp de Atendimento (com 258)</label>
+          <input id="setWhatsapp" type="text" required class="w-full px-3 py-2 border border-slate-300 rounded-lg" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Número M-Pesa</label>
+            <input id="setMpesaNum" type="text" required class="w-full px-3 py-2 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Titular M-Pesa</label>
+            <input id="setMpesaName" type="text" required class="w-full px-3 py-2 border border-slate-300 rounded-lg" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Número e-Mola</label>
+            <input id="setEmolaNum" type="text" required class="w-full px-3 py-2 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Titular e-Mola</label>
+            <input id="setEmolaName" type="text" required class="w-full px-3 py-2 border border-slate-300 rounded-lg" />
+          </div>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeSettingsModal()" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-emerald-700 text-white font-semibold">Guardar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-xs sm:text-sm font-medium px-4 py-2.5 rounded-full shadow-lg"></div>
+
+  <script>
+    // Configurações padrão da DigiLoja MZ
+    const DEFAULT_SETTINGS = {
+      storeName: "DigiLoja MZ",
+      whatsapp: "258858972605",
+      mpesaNumber: "858972605",
+      mpesaName: "Luciano Eusébio",
+      emolaNumber: "870550188",
+      emolaName: "Solfino Marcelino Eusébio"
+    };
+
+    // Catálogo padrão de produtos em PDF
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 1,
+        title: "Manual de Controle Financeiro e Gestão de Lucros",
+        category: "Finanças & Negócios",
+        price: 350,
+        format: "PDF",
+        badge: "Mais Vendido",
+        color: "from-emerald-700 to-teal-800",
+        icon: "📊",
+        description: "Aprenda a separar o dinheiro pessoal do negócio, controlar o fluxo de caixa diário, calcular preços de venda sem prejuízo e apurar o lucro real em Meticais.",
+        includes: [
+          "7 capítulos práticos com exemplos reais em Meticais (MT)",
+          "Fórmulas simples de precificação e ponto de equilíbrio",
+          "Modelo pronto de folha de fluxo de caixa diário",
+          "Checklist rápido de saúde financeira para pequenos negócios"
+        ]
+      },
+      {
+        id: 2,
+        title: "Guia Prático: Importação da China para Moçambique",
+        category: "Importação & Comércio",
+        price: 500,
+        format: "PDF",
+        badge: "Completo",
+        color: "from-amber-600 to-orange-700",
+        icon: "🚢",
+        description: "Passo a passo completo para comprar produtos diretamente de fornecedores chineses (Alibaba, 1688 e AliExpress) e receber com segurança em Moçambique.",
+        includes: [
+          "Como encontrar fornecedores verificados e negociar preços",
+          "Como usar transitários e calcular custos de frete aéreo e marítimo",
+          "Dicas para evitar bloqueios na alfândega e escolher produtos lucrativos",
+          "Glossário essencial de termos de importação"
+        ]
+      },
+      {
+        id: 3,
+        title: "Coletânea de Contratos Comerciais e Prestação de Serviços",
+        category: "Modelos & Contratos",
+        price: 300,
+        format: "PDF",
+        badge: "Pronto a Usar",
+        color: "from-slate-700 to-slate-900",
+        icon: "📄",
+        description: "Modelos claros e bem estruturados de contratos e recibos para proteger os seus acordos comerciais, parcerias, empreitadas e prestação de serviços.",
+        includes: [
+          "Modelo de Contrato de Prestação de Serviços",
+          "Modelo de Contrato de Compra e Venda Comercial",
+          "Modelo de Recibo de Pagamento e Termo de Entrega",
+          "Cláusulas essenciais de prazos, garantias e multas por atraso"
+        ]
+      },
+      {
+        id: 4,
+        title: "Guia Completo de Orçamento e Quantificação de Obras",
+        category: "Engenharia & Obras",
+        price: 450,
+        format: "PDF",
+        badge: "Técnico",
+        color: "from-blue-700 to-indigo-900",
+        icon: "🏗️",
+        description: "Manual técnico prático para calcular quantidades de blocos, cimento, areia, brita, ferro e custos de mão de obra em projetos de construção civil.",
+        includes: [
+          "Cálculo de materiais por m² de alvenaria e reboco",
+          "Traços de betão e argamassas mais usados em obra",
+          "Estrutura de mapa de quantidades e orçamento",
+          "Dicas para evitar desperdícios de material no estaleiro"
+        ]
+      },
+      {
+        id: 5,
+        title: "Apostila Completa de Marketing Digital e Vendas no WhatsApp",
+        category: "Marketing & Vendas",
+        price: 250,
+        format: "PDF",
+        badge: "Iniciante",
+        color: "from-green-600 to-emerald-800",
+        icon: "📲",
+        description: "Estratégias práticas para transformar o seu WhatsApp e redes sociais numa máquina de vendas diárias, com scripts prontos de atendimento e fecho.",
+        includes: [
+          "Como configurar o WhatsApp Business de forma profissional",
+          "Scripts prontos para responder clientes e quebrar objeções de preço",
+          "Estratégias de status que geram pedidos todos os dias",
+          "Como criar ofertas irresistíveis para produtos físicos e digitais"
+        ]
+      }
+    ];
+
+    let settings = JSON.parse(localStorage.getItem("digiloja_settings")) || DEFAULT_SETTINGS;
+    let products = JSON.parse(localStorage.getItem("digiloja_products")) || DEFAULT_PRODUCTS;
+    let cart = JSON.parse(localStorage.getItem("digiloja_cart")) || [];
+    let selectedCategory = "Todos";
+    let selectedPaymentMethod = "M-Pesa";
+
+    function formatMZN(val) {
+      return Number(val).toLocaleString("pt-MZ") + " MT";
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.remove("hidden");
+      setTimeout(() => t.classList.add("hidden"), 2800);
+    }
+
+    function applySettingsUI() {
+      document.getElementById("brandNameHeader").textContent = settings.storeName;
+      document.getElementById("brandNameFooter").textContent = settings.storeName;
+      document.getElementById("footerMpesa").textContent = settings.mpesaNumber;
+      document.getElementById("footerEmola").textContent = settings.emolaNumber;
+      document.getElementById("heroWhatsappBtn").href = `https://wa.me/${settings.whatsapp}`;
+      updatePaymentBox();
+    }
+
+    function renderCategories() {
+      const cats = ["Todos", ...new Set(products.map(p => p.category))];
+      const container = document.getElementById("categoryFilters");
+      container.innerHTML = cats.map(cat => {
+        const active = cat === selectedCategory;
+        return `
+          <button onclick="setCategory('${cat}')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition ${
+            active
+              ? "bg-emerald-700 text-white shadow-xs"
+              : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+          }">
+            ${cat}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function setCategory(cat) {
+      selectedCategory = cat;
+      renderCategories();
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const filtered = products.filter(p => {
+        const matchCat = selectedCategory === "Todos" || p.category === selectedCategory;
+        const matchQuery =
+          p.title.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query);
+        return matchCat && matchQuery;
+      });
+
+      const grid = document.getElementById("productsGrid");
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500">Nenhum produto encontrado para a sua pesquisa.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition flex flex-col">
+          <div onclick="openProductModal(${p.id})" class="cursor-pointer bg-gradient-to-br ${p.color || 'from-emerald-700 to-teal-800'} p-6 text-white relative">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-3xl">${p.icon || "📘"}</span>
+              <span class="text-[11px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-xs px-2.5 py-1 rounded-full">
+                ${p.format || "PDF"}
+              </span>
+            </div>
+            <h3 class="font-bold text-lg leading-snug line-clamp-2">${p.title}</h3>
+            <p class="text-xs text-white/80 mt-1">${p.category}</p>
+          </div>
+
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <p class="text-sm text-slate-600 line-clamp-3 leading-relaxed">${p.description}</p>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+              <div>
+                <span class="block text-[11px] text-slate-400 uppercase font-semibold">Preço</span>
+                <span class="text-xl font-extrabold text-slate-900">${formatMZN(p.price)}</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="openProductModal(${p.id})" class="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition">
+                  Detalhes
+                </button>
+                <button onclick="addToCart(${p.id})" class="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition">
+                  + Comprar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function openProductModal(id) {
+      const p = products.find(item => item.id === id);
+      if (!p) return;
+
+      const includesHtml = (p.includes && p.includes.length)
+        ? `<div class="mt-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">O que está incluído neste PDF:</h4>
+            <ul class="space-y-1.5 text-sm text-slate-600">
+              ${p.includes.map(item => `<li class="flex items-start gap-2"><span class="text-emerald-600 font-bold">✓</span><span>${item}</span></li>`).join("")}
+            </ul>
+          </div>`
+        : "";
+
+      document.getElementById("productModalContent").innerHTML = `
+        <div class="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-3">
+          <span>${p.icon || "📘"}</span> ${p.category} • Formato ${p.format || "PDF"}
+        </div>
+        <h3 class="text-xl font-extrabold text-slate-900">${p.title}</h3>
+        <p class="text-sm text-slate-600 mt-2 leading-relaxed">${p.description}</p>
+        ${includesHtml}
+        <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-400 block">Valor único</span>
+            <span class="text-2xl font-extrabold text-emerald-700">${formatMZN(p.price)}</span>
+          </div>
+          <button onclick="addToCart(${p.id}); closeProductModal(); toggleCart(true);" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-5 py-3 rounded-xl text-sm shadow transition">
+            Adicionar ao Carrinho
+          </button>
+        </div>
+      `;
+      document.getElementById("productModal").classList.remove("hidden");
+    }
+
+    function closeProductModal() {
+      document.getElementById("productModal").classList.add("hidden");
+    }
+
+    function addToCart(id) {
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        showToast("Este produto já está no seu carrinho.");
+        return;
+      }
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+      cart.push({ id: product.id, title: product.title, price: product.price, format: product.format || "PDF" });
+      saveCart();
+      showToast("Produto adicionado ao carrinho!");
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      saveCart();
+    }
+
+    function saveCart() {
+      localStorage.setItem("digiloja_cart", JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      document.getElementById("cartBadge").textContent = cart.length;
+      const container = document.getElementById("cartItemsContainer");
+      const footer = document.getElementById("cartFooter");
+
+      if (cart.length === 0) {
+        footer.classList.add("hidden");
+        container.innerHTML = `
+          <div class="text-center py-16 space-y-3">
+            <div class="text-4xl">🛒</div>
+            <p class="font-semibold text-slate-700">O seu carrinho está vazio</p>
+            <p class="text-xs text-slate-500">Escolha um guia ou manual em PDF no catálogo para começar.</p>
+          </div>
+        `;
+        return;
+      }
+
+      footer.classList.remove("hidden");
+      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+      document.getElementById("cartTotal").textContent = formatMZN(total);
+
+      container.innerHTML = cart.map(item => `
+        <div class="flex items-start justify-between gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <div>
+            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${item.format}</span>
+            <h4 class="font-bold text-sm text-slate-900 mt-1">${item.title}</h4>
+            <p class="text-sm font-extrabold text-emerald-700 mt-0.5">${formatMZN(item.price)}</p>
+          </div>
+          <button onclick="removeFromCart(${item.id})" class="text-xs text-red-500 hover:text-red-700 font-semibold px-2 py-1">
+            Remover
+          </button>
+        </div>
+      `).join("");
+
+      updatePaymentBox();
+    }
+
+    function selectPaymentMethod(method) {
+      selectedPaymentMethod = method;
+      const btnM = document.getElementById("btnMethodMpesa");
+      const btnE = document.getElementById("btnMethodEmola");
+
+      if (method === "M-Pesa") {
+        btnM.className = "py-2 px-3 rounded-lg border-2 border-red-600 bg-red-50 text-red-700 font-bold text-xs flex items-center justify-center gap-1.5";
+        btnE.className = "py-2 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5";
+      } else {
+        btnE.className = "py-2 px-3 rounded-lg border-2 border-orange-500 bg-orange-50 text-orange-700 font-bold text-xs flex items-center justify-center gap-1.5";
+        btnM.className = "py-2 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5";
+      }
+      updatePaymentBox();
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      showToast("Número copiado: " + text);
+    }
+
+    function updatePaymentBox() {
+      const box = document.getElementById("paymentDetailsBox");
+      if (!box) return;
+      const isMpesa = selectedPaymentMethod === "M-Pesa";
+      const number = isMpesa ? settings.mpesaNumber : settings.emolaNumber;
+      const holder = isMpesa ? settings.mpesaName : settings.emolaName;
+      const badgeColor = isMpesa ? "text-red-700 bg-red-50 border-red-200" : "text-orange-700 bg-orange-50 border-orange-200";
+
+      box.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-800">Dados para Transferência:</span>
+          <span class="px-2 py-0.5 rounded border font-bold ${badgeColor}">${selectedPaymentMethod}</span>
+        </div>
+        <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+          <div>
+            <div class="text-slate-500">Número: <strong class="text-slate-900 text-sm">${number}</strong></div>
+            <div class="text-slate-500">Nome: <strong class="text-slate-800">${holder}</strong></div>
+          </div>
+          <button type="button" onclick="copyText('${number}')" class="bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-1.5 rounded-lg font-semibold text-[11px]">
+            Copiar
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          1. Transfira o valor total para o número acima.<br>
+          2. Clique no botão verde abaixo para enviar o comprovativo no WhatsApp.
+        </p>
+      `;
+    }
+
+    function finalizeOrderWhatsApp() {
+      const name = document.getElementById("customerName").value.trim();
+      if (!name) {
+        showToast("Por favor, escreva o seu nome antes de continuar.");
+        document.getElementById("customerName").focus();
+        return;
+      }
+      if (cart.length === 0) return;
+
+      const orderId = "PED-" + Math.floor(1000 + Math.random() * 9000);
+      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+      const itemsList = cart.map((item, idx) => `${idx + 1}. ${item.title} (${formatMZN(item.price)})`).join("\n");
+
+      const message =
+        `Olá *${settings.storeName}*! Acabei de fazer um pedido no site:\n\n` +
+        `*Ref. Pedido:* #${orderId}\n` +
+        `*Cliente:* ${name}\n` +
+        `*Método de Pagamento:* ${selectedPaymentMethod}\n\n` +
+        `*Produtos (PDF):*\n${itemsList}\n\n` +
+        `*Total Pago:* ${formatMZN(total)}\n\n` +
+        `Segue abaixo o comprovativo de transferência para receber os meus ficheiros PDF:`;
+
+      const url = `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
+    }
+
+    function toggleCart(open) {
+      const drawer = document.getElementById("cartDrawer");
+      if (open) {
+        updateCartUI();
+        drawer.classList.remove("hidden");
+      } else {
+        drawer.classList.add("hidden");
+      }
+    }
+
+    // Administração de Produtos
+    function openAdminModal() {
+      renderAdminList();
+      document.getElementById("adminModal").classList.remove("hidden");
+    }
+    function closeAdminModal() {
+      document.getElementById("adminModal").classList.add("hidden");
+    }
+
+    function renderAdminList() {
+      const list = document.getElementById("adminProductList");
+      list.innerHTML = products.map(p => `
+        <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl text-sm">
+          <div>
+            <p class="font-bold text-slate-800">${p.title}</p>
+            <p class="text-xs text-slate-500">${p.category} • ${formatMZN(p.price)}</p>
+          </div>
+          <button onclick="deleteProduct(${p.id})" class="text-xs text-red-600 hover:bg-red-50 px-2.5 py-1.5 rounded-lg font-semibold">
+            Apagar
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function addNewProduct(e) {
+      e.preventDefault();
+      const newProd = {
+        id: Date.now(),
+        title: document.getElementById("newTitle").value.trim(),
+        category: document.getElementById("newCategory").value,
+        price: Number(document.getElementById("newPrice").value),
+        format: document.getElementById("newFormat").value.trim() || "PDF",
+        color: "from-emerald-700 to-teal-800",
+        icon: "📘",
+        description: document.getElementById("newDesc").value.trim(),
+        includes: ["Ficheiro digital completo em PDF", "Entrega imediata via WhatsApp após confirmação"]
+      };
+      products.unshift(newProd);
+      localStorage.setItem("digiloja_products", JSON.stringify(products));
+      e.target.reset();
+      renderCategories();
+      renderProducts();
+      renderAdminList();
+      showToast("Novo produto adicionado com sucesso!");
+    }
+
+    function deleteProduct(id) {
+      products = products.filter(p => p.id !== id);
+      localStorage.setItem("digiloja_products", JSON.stringify(products));
+      renderCategories();
+      renderProducts();
+      renderAdminList();
+      showToast("Produto removido.");
+    }
+
+    function resetDefaultProducts() {
+      products = [...DEFAULT_PRODUCTS];
+      localStorage.setItem("digiloja_products", JSON.stringify(products));
+      renderCategories();
+      renderProducts();
+      renderAdminList();
+      showToast("Catálogo padrão restaurado.");
+    }
+
+    // Configurações
+    function openSettingsModal() {
+      document.getElementById("setStoreName").value = settings.storeName;
+      document.getElementById("setWhatsapp").value = settings.whatsapp;
+      document.getElementById("setMpesaNum").value = settings.mpesaNumber;
+      document.getElementById("setMpesaName").value = settings.mpesaName;
+      document.getElementById("setEmolaNum").value = settings.emolaNumber;
+      document.getElementById("setEmolaName").value = settings.emolaName;
+      document.getElementById("settingsModal").classList.remove("hidden");
+    }
+
+    function closeSettingsModal() {
+      document.getElementById("settingsModal").classList.add("hidden");
+    }
+
+    function saveSettings(e) {
+      e.preventDefault();
+      settings = {
+        storeName: document.getElementById("setStoreName").value.trim(),
+        whatsapp: document.getElementById("setWhatsapp").value.trim(),
+        mpesaNumber: document.getElementById("setMpesaNum").value.trim(),
+        mpesaName: document.getElementById("setMpesaName").value.trim(),
+        emolaNumber: document.getElementById("setEmolaNum").value.trim(),
+        emolaName: document.getElementById("setEmolaName").value.trim()
+      };
+      localStorage.setItem("digiloja_settings", JSON.stringify(settings));
+      applySettingsUI();
+      closeSettingsModal();
+      showToast("Dados de recebimento atualizados!");
+    }
+
+    // Inicializar
+    applySettingsUI();
+    renderCategories();
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
